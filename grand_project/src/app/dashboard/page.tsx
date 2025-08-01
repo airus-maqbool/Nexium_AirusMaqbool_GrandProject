@@ -4,17 +4,18 @@ import { useEffect, useState } from 'react';
 import { supabase } from '@/lib/supabaseClient';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import { User } from '@supabase/supabase-js'; // ✅ Correct User type import
 
 export default function Dashboard() {
-  const [user, setUser] = useState<any>(null);
+  const [user, setUser] = useState<User | null>(null); // ✅ Replaced `any` with `User | null`
   const [loading, setLoading] = useState(true);
   const router = useRouter();
 
   useEffect(() => {
     const getUser = async () => {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (user) {
-        setUser(user);
+      const { data, error } = await supabase.auth.getUser();
+      if (data?.user) {
+        setUser(data.user);
       } else {
         router.push('/login');
       }
@@ -58,7 +59,7 @@ export default function Dashboard() {
               </button>
             </div>
           </div>
-          
+
           <div className="bg-blue-50 rounded-lg p-6 mb-6">
             <h2 className="text-xl font-semibold text-blue-800 mb-2">Your Account</h2>
             <p className="text-blue-700">Email: {user?.email}</p>
@@ -72,7 +73,7 @@ export default function Dashboard() {
                 <p className="text-blue-100">Start building your tailored resume with AI assistance.</p>
               </div>
             </Link>
-            
+
             <div className="bg-gradient-to-r from-green-500 to-green-600 text-white rounded-lg p-6">
               <h3 className="text-xl font-semibold mb-2">My Resumes</h3>
               <p className="text-green-100">View and edit your existing resumes.</p>
@@ -82,4 +83,4 @@ export default function Dashboard() {
       </div>
     </div>
   );
-} 
+}
