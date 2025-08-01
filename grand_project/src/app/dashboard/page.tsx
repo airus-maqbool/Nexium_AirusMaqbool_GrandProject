@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import { supabase } from '@/lib/supabaseClient';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 
 export default function Dashboard() {
   const [user, setUser] = useState<any>(null);
@@ -42,12 +43,20 @@ export default function Dashboard() {
         <div className="bg-white rounded-xl shadow-xl p-8">
           <div className="flex justify-between items-center mb-8">
             <h1 className="text-3xl font-bold text-blue-900">Welcome to Resume Tailor</h1>
-            <button
-              onClick={handleSignOut}
-              className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg transition-colors"
-            >
-              Sign Out
-            </button>
+            <div className="flex space-x-4">
+              <Link
+                href="/home"
+                className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg transition-colors"
+              >
+                Go to Resume Tailor
+              </Link>
+              <button
+                onClick={handleSignOut}
+                className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg transition-colors"
+              >
+                Sign Out
+              </button>
+            </div>
           </div>
           
           <div className="bg-blue-50 rounded-lg p-6 mb-6">
@@ -57,10 +66,12 @@ export default function Dashboard() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-lg p-6">
-              <h3 className="text-xl font-semibold mb-2">Create New Resume</h3>
-              <p className="text-blue-100">Start building your tailored resume with AI assistance.</p>
-            </div>
+            <Link href="/home" className="block">
+              <div className="bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-lg p-6 hover:from-blue-600 hover:to-blue-700 transition-all cursor-pointer">
+                <h3 className="text-xl font-semibold mb-2">Create New Resume</h3>
+                <p className="text-blue-100">Start building your tailored resume with AI assistance.</p>
+              </div>
+            </Link>
             
             <div className="bg-gradient-to-r from-green-500 to-green-600 text-white rounded-lg p-6">
               <h3 className="text-xl font-semibold mb-2">My Resumes</h3>

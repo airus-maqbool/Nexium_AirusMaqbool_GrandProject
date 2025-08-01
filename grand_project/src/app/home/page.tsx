@@ -3,6 +3,8 @@
 import { useState } from "react";
 import dynamic from "next/dynamic";
 import { extractTextFromPDF } from "@/lib/extractTextFromPDF";
+import { useAuth } from "@/contexts/AuthContext";
+import { useRouter } from "next/navigation";
 
 const PdfPreview = dynamic(() => import("@/components/PdfPreview"), { ssr: false });
 
@@ -18,12 +20,19 @@ interface AIResponse {
 }
 
 export default function HomePage() {
+  const { user, signOut } = useAuth();
+  const router = useRouter();
   const [jobDesc, setJobDesc] = useState("");
   const [pdfFile, setPdfFile] = useState<File | null>(null);
   const [showCards, setShowCards] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [aiResponse, setAiResponse] = useState<AIResponse | null>(null);
   const [error, setError] = useState<string | null>(null);
+
+  const handleSignOut = async () => {
+    await signOut();
+    router.push('/login');
+  };
 
   function onFileChange(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
@@ -167,8 +176,6 @@ export default function HomePage() {
     }
   }
 
-
-
   function handleCopy(text: string) {
     navigator.clipboard.writeText(text);
   }
@@ -177,6 +184,21 @@ export default function HomePage() {
     <div className="min-h-screen bg-white flex">
       {/* Left Section */}
       <div className="flex-1 flex flex-col items-center justify-center p-8 bg-gradient-to-br from-blue-50 to-blue-100 relative">
+        {/* User Info Header */}
+        {user && (
+          <div className="absolute top-4 right-4 flex items-center space-x-4">
+            <div className="text-sm text-gray-600">
+              Welcome, {user.email}
+            </div>
+            <button
+              onClick={handleSignOut}
+              className="text-sm text-red-600 hover:text-red-700 font-medium"
+            >
+              Sign Out
+            </button>
+          </div>
+        )}
+
         <div className="w-full max-w-2xl space-y-6">
           {/* Job Description */}
           <textarea
@@ -323,3 +345,5 @@ export default function HomePage() {
     </div>
   );
 }
+
+// re_Ub1SN5W2_7Y3swbdrAqqr4c4XdQakkwnP   resend api key name is resumeTailorMagicLinkLogin
