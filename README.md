@@ -9,7 +9,7 @@
 
 ## 🚀 Features
 
-- 🔐 Email login via magic link (using Resend)
+- 🔐 Email login via magic link (using supabase and resend for email smtp)
 - 📄 Upload a resume in PDF format
 - 📝 Paste a job description
 - 💡 AI analyzes and suggests improvements
@@ -34,5 +34,5 @@
 ### 1. Clone the repo
 
 ```bash
-git clone https://github.com/your-username/your-repo-name.git
-cd your-repo-name
+git clone https://github.com/airus-maqbool/Nexium_AirusMaqbool_GrandProject.git
+cd grand-project
