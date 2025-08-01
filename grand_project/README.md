@@ -20,6 +20,63 @@ You can start editing the page by modifying `app/page.tsx`. The page auto-update
 
 This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
+## N8N Integration Setup
+
+This project integrates with N8N for AI-powered resume tailoring. To set up the integration:
+
+1. **Create a `.env.local` file** in the root directory with:
+   ```
+   NEXT_PUBLIC_N8N_WEBHOOK_URL=https://your-n8n-instance.com/webhook/your-workflow-id
+   ```
+
+2. **N8N Workflow Configuration**:
+   - Create a webhook node as the first node in your workflow
+   - Connect it to a code node with the following code:
+   ```javascript
+   const resumeText = $input.first().json.resumeText;
+   const jobDescription = $input.first().json.jobDescription;
+
+   return {
+     json: {
+       resumeText: resumeText,
+       jobDescription: jobDescription
+     }
+   };
+   ```
+   - Connect to an OpenAI node with this prompt:
+   ```
+   Analyze this resume and job description to provide tailored suggestions:
+
+   Job Description: {{$json.jobDescription}}
+
+   Resume Text: {{$json.resumeText}}
+
+   Please provide:
+   1. Key skills that match the job requirements
+   2. A professional summary tailored to this position
+   3. A matching score (0-100) with explanation
+   4. Tell which projects are matched according to job description and which not
+
+   Format the response as JSON with keys: skills, summary, score, matched projects
+   ```
+   - Connect to a final code node:
+   ```javascript
+   const aiResponse = $input.first().json;
+   return {
+     json: {
+       skills: aiResponse.skills || [],
+       summary: aiResponse.summary || "",
+       score: aiResponse.score || 0,
+       explanation: aiResponse.explanation || ""
+     }
+   };
+   ```
+
+3. **Test the Integration**:
+   - Use the "Test Data" button to verify the webhook connection
+   - Check browser console for detailed logging
+   - Ensure your N8N workflow is active and not paused
+
 ## Learn More
 
 To learn more about Next.js, take a look at the following resources:
