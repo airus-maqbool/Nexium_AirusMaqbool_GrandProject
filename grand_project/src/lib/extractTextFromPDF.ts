@@ -55,7 +55,7 @@ export async function extractTextFromPDF(file: File): Promise<string> {
       /Architected|Implemented|Optimized|Connected|Integrated|Built|Created|Expanded|Configured/g // Action words
     ];
     
-    let foundContent = [];
+    const foundContent = [];
     for (const pattern of resumePatterns) {
       const matches = rawText.match(pattern) || [];
       foundContent.push(...matches);
@@ -108,7 +108,7 @@ export async function extractTextFromPDF(file: File): Promise<string> {
       /Engineer/g
     ];
     
-    let foundNames = [];
+    const foundNames = [];
     for (const pattern of namePatterns) {
       const matches = rawText.match(pattern) || [];
       foundNames.push(...matches);
